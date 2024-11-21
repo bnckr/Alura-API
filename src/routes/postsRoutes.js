@@ -1,14 +1,27 @@
-// Importa o módulo Express para criar e configurar o servidor web
 import express from "express";
-import { listarPosts, postarNovoPost } from "../controllers/postsController.js";
+import multer from "multer";
+import {
+  listarPosts,
+  postarNovoPost,
+  uploadImagem,
+} from "../controllers/postsController.js";
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ dest: "./uploads", storage });
 
 const routes = (app) => {
-  // Adiciona o middleware para processar requisições no formato JSON
   app.use(express.json());
-  // Define uma rota GET em "/posts" para retornar todos os posts
   app.get("/posts", listarPosts);
-  // Define uma rota POST em "/posts" para criar um post
   app.post("/posts", postarNovoPost);
+  app.post("/upload", upload.single("imagem"), uploadImagem);
 };
 
 export default routes;
