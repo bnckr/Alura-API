@@ -11,7 +11,7 @@ export default async function gerarDescricaoComGemini(imageBuffer) {
     const image = {
       inlineData: {
         data: imageBuffer.toString("base64"),
-        mimeType: "image/png",
+        mimeType: "image/jpg",
       },
     };
     const res = await model.generateContent([prompt, image]);
